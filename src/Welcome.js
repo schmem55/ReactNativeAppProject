@@ -12,7 +12,7 @@ import {
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-export default function WelcomeScreen() {
+export default function WelcomeScreen({navigation}) {
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: "711862344854-3bl5u2rseqt2d15jlehl4jrqepbgmfft.apps.googleusercontent.com", // client ID of type WEB for your server(needed to verify user ID and offline access)
@@ -27,16 +27,18 @@ export default function WelcomeScreen() {
       await GoogleSignin.hasPlayServices();
       const info = await GoogleSignin.signIn();
       console.warn({userInfo: info});
-      setUserInfo(info);
+      //setUserInfo(info);
+      navigation.navigate('Profile')
+
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
+       console.log("1")
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
+        console.log("2")
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
+        console.log("3")
       } else {
-        // some other error happened
+        console.log(error)
       }
     }
   };
@@ -45,7 +47,7 @@ export default function WelcomeScreen() {
     try {
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
-      setUserInfo(null); // Remember to remove the user from your app's state as well
+      //setUserInfo(null); // Remember to remove the user from your app's state as well
     } catch (error) {
       console.error(error);
     }
@@ -71,6 +73,8 @@ export default function WelcomeScreen() {
                   (data) => {
                     console.log(data.accessToken.toString())
                   }
+                ).then(
+                  navigation.navigate('Profile')
                 )
               }
             }
