@@ -9,13 +9,6 @@ export default function ProfileScreen({route,navigation}) {
 
   getMoviesList=async()=>{
     const apiKey="8b6a5997689890ea67ffcfbd4aac28f9";
-    let arrayOfMovies = []
-    let movie = {
-      "title":"",
-      "poster":"",
-      "overview":"",
-      "vote_count":""
-    }
 
     try{
       let response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`, {
@@ -28,13 +21,13 @@ export default function ProfileScreen({route,navigation}) {
       let responseJson = await response.json();
       console.log(responseJson.results)
       responseJson.results.map(async (k,i)=>{
-        console.log(k.title)
-        // movie.title = k.title
-        // movie.poster = k.poster_path
-        // movie.overview = k.overview 
-        // movie.vote_count = k.vote_count
-        
-        setMovies(movies=>[...movies,k.title])
+
+        setMovies(movies=>[...movies,{
+          "title":k.title,
+          "poster":k.poster_path,
+          "overview":k.overview ,
+          "popularity":k.popularity
+        }])
 
       })
       if (movies){
@@ -44,6 +37,14 @@ export default function ProfileScreen({route,navigation}) {
      } catch (error){
        console.error(error);
      }
+  }
+
+  openDetails=(details)=>{
+    console.log(details)
+    navigation.navigate('MovieDetails',{
+      itemId:1,
+      details:details
+    })
   }
 
   return (
@@ -66,8 +67,12 @@ export default function ProfileScreen({route,navigation}) {
         <View style={styles.moviesView}>
           {movies.map((k,i)=>{
             return (
-            <TouchableOpacity key={i}>
-              <Text>{k}</Text>
+            <TouchableOpacity
+            onPress={
+              ()=>openDetails(k)
+            }
+             key={i}>
+              <Text>{k.title}</Text>
             </TouchableOpacity>
             )
           })}   
