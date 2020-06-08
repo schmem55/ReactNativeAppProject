@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text,StyleSheet,Image ,TouchableOpacity,Dimensions} from 'react-native';
+import { useRoute } from '@react-navigation/native';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-export default function ProfileScreen({route,navigation}) {
+export default function ProfileScreen({navigation}) {
   const [movies,setMovies]=useState([]);
+  const route = useRoute();
 
   getMoviesList=async()=>{
     const apiKey="8b6a5997689890ea67ffcfbd4aac28f9";
@@ -50,7 +52,7 @@ export default function ProfileScreen({route,navigation}) {
   return (
     <View style={styles.container}>
       <View style={{justifyContent:'center',alignItems:'center'}}>
-        <Text>Welcome John Doe</Text>
+        <Text>Welcome {route.params.userInfo.givenName}</Text>
         <Image
         style={styles.image}  
         source={{

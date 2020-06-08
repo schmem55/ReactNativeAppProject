@@ -34,7 +34,18 @@ export default function WelcomeScreen({navigation}) {
     try {
       await GoogleSignin.hasPlayServices();
       const info = await GoogleSignin.signIn();
-      navigation.navigate('Profile')
+      console.log(info.user)
+      setUserInfo(userInfo=>({...userInfo,
+        "email":info.user.email,
+        "familyName":info.user.familyName,
+        "givenName":info.user.givenName,
+        "id":info.user.id,
+        "photo":info.user.photo
+      }))
+
+      navigation.navigate('Profile',{
+        userInfo:userInfo
+      })
 
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
