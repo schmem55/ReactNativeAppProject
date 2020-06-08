@@ -13,6 +13,14 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 export default function WelcomeScreen({navigation}) {
+  const [userInfo,setUserInfo]=useState({
+    "email":"",
+    "familyName":"",
+    "givenName":"",
+    "id":"",
+    "photo":""
+  });
+
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: "711862344854-3bl5u2rseqt2d15jlehl4jrqepbgmfft.apps.googleusercontent.com", // client ID of type WEB for your server(needed to verify user ID and offline access)
@@ -20,14 +28,12 @@ export default function WelcomeScreen({navigation}) {
       forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
       accountName: '', // [Android] specifies an account name on the device that should be used
          });
-  }, [])
+  }, [userInfo])
 
   signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const info = await GoogleSignin.signIn();
-      console.warn({userInfo: info});
-      //setUserInfo(info);
       navigation.navigate('Profile')
 
     } catch (error) {
@@ -71,6 +77,7 @@ export default function WelcomeScreen({navigation}) {
               } else {
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
+                    setUserInfo(data)
                     console.log(data.accessToken.toString())
                   }
                 ).then(
@@ -79,7 +86,7 @@ export default function WelcomeScreen({navigation}) {
               }
             }
           }
-          onLogoutFinished={() => console.log("logout.")}/>
+          onLogoutFinished={() => setUserInfo(null)}/>
             <TouchableOpacity onPress={()=>signIn()} style={[styles.button,{backgroundColor:'red'}]}>
                 <Text>Logo</Text>
                 <Text style={styles.text}>Log in with Google</Text>
