@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "711862344854",
+    "firebase_url": "https://isracard-9a8d6.firebaseio.com",
+    "project_id": "isracard-9a8d6",
+    "storage_bucket": "isracard-9a8d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711862344854:android:5a8057cd5fb8f39819f6b7",
+        "android_client_info": {
+          "package_name": "com.isracardproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "711862344854-3bl5u2rseqt2d15jlehl4jrqepbgmfft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDogFFHVr2SuVbjwfODwODdz21iBygodk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "711862344854-3bl5u2rseqt2d15jlehl4jrqepbgmfft.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
