@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { View, Text,StyleSheet,Dimensions,TouchableOpacity} from 'react-native';
-import { LoginButton, AccessToken } from 'react-native-fbsdk';
+import { LoginButton, AccessToken,  GraphRequest,GraphRequestManager,} from 'react-native-fbsdk';
 
 import {
   GoogleSignin,
@@ -24,32 +24,59 @@ export default function WelcomeScreen({navigation}) {
          });
   }, [])
 
+  const getInfoFromToken = token => {
+    const PROFILE_REQUEST_PARAMS = {
+      fields: {
+        string: 'id, name,  first_name, last_name, picture.type(large)'
+      },
+    };
+
+    const profileRequest = new GraphRequest(
+      '/me',
+      {token, parameters: PROFILE_REQUEST_PARAMS},
+      (error, result) => {
+        if (error) {
+          console.log('login info has error: ' + error);
+        } else {
+
+          // setUserInfo((prevState)=>({
+          //   ...prevState,            
+          //   "givenName":result.name,
+          // }))
+
+          // setUserInfo((prevState)=>({
+          //   ...prevState,            
+          //   "photo":result.picture.data.url
+          // }))
+
+          console.log(userInfo)
+          navigation.navigate('Profile',{
+            userInfo:userInfo
+          })
+        }
+      },
+    );
+    new GraphRequestManager().addRequest(profileRequest).start();
+  };
+
   signIn = async () => {
     var userData =      {
-      "email":"",
-      "familyName":"",
       "givenName":"",
-      "id":"",
       "photo":""
     }
     try {
       await GoogleSignin.hasPlayServices();
       const info = await GoogleSignin.signIn();
 
-      userData.email=info.user.email
-      userData.familyName=info.user.familyName
       userData.givenName=info.user.givenName
-      userData.id=info.user.id
       userData.photo=info.user.photo
 
-     
-     setUserInfo(userInfo=>({...userInfo,
-      "userData":userData
-    }))
+    //  setUserInfo(userInfo=>({...userInfo,
+    //   userData
+    // }))
 
-     console.log(userInfo)
       navigation.navigate('Profile',{
-        userInfo:userInfo
+        userInfo:userData
       })
 
     } catch (error) {
@@ -84,25 +111,20 @@ export default function WelcomeScreen({navigation}) {
         </View>
         <View style={styles.buttonsView}>
         <LoginButton
-          onLoginFinished={
-            (error, result) => {
-              if (error) {
-                console.log("login has error: " + result.error);
-              } else if (result.isCancelled) {
-                console.log("login is cancelled.");
-              } else {
-                AccessToken.getCurrentAccessToken().then(
-                  (data) => {
-                    setUserInfo(data)
-                    console.log(data.accessToken.toString())
-                  }
-                ).then(
-                  navigation.navigate('Profile')
-                )
-              }
+          onLoginFinished={(error, result) => {
+            if (error) {
+              console.log('login has error: ' + result);
+            } else if (result.isCancelled) {
+              console.log('login is cancelled.');
+            } else {
+              AccessToken.getCurrentAccessToken().then(data => {
+                const accessToken = data.accessToken.toString();
+                getInfoFromToken(accessToken);
+              })
             }
-          }
-          onLogoutFinished={() => setUserInfo(null)}/>
+          }}
+          onLogoutFinished={() => setUserInfo(null)}
+        />
             <TouchableOpacity onPress={()=>signIn()} style={[styles.button,{backgroundColor:'red'}]}>
                 <Text>Logo</Text>
                 <Text style={styles.text}>Log in with Google</Text>
