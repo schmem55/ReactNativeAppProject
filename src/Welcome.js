@@ -27,7 +27,7 @@ export default function WelcomeScreen({navigation}) {
   const getInfoFromToken = token => {
     const PROFILE_REQUEST_PARAMS = {
       fields: {
-        string: 'id, name,  first_name, last_name'
+        string: 'id, name,  first_name, last_name, picture.type(large)'
       },
     };
 
@@ -41,7 +41,7 @@ export default function WelcomeScreen({navigation}) {
           console.log('result:', result);
           var userData ={
             "givenName":result.name,
-            "photo":""
+            "photo":result.picture.data.url
           }
           navigation.navigate('Profile',{
             userInfo:userData
