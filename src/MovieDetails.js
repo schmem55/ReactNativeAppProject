@@ -3,7 +3,6 @@ import { useRoute } from '@react-navigation/native';
 import { View, Text,TouchableOpacity,StyleSheet,Image } from 'react-native';
 
 export default function MovieDetailsScreen(props) {
-  const [details,setDetails]=useState()
   const [isFavorite,setFavorite]=useState(false)
   const route = useRoute();
 
@@ -26,23 +25,18 @@ export default function MovieDetailsScreen(props) {
   return (
     <View style={styles.container}>
       <Text>{route.params.details.title}</Text>
-      {/* <Text>Ad Astra</Text> */}
+
 
       <Image
         style={styles.image}  
         source={{
             uri: `http://image.tmdb.org/t/p/w500/${route.params.details.poster}`,
           }}/>
-          {/* <Image
-        style={styles.image}  
-        source={{
-            uri: "http://image.tmdb.org/t/p/w500/xBHvZcjRiWyobQ9kxBhO6B2dtRI.jpg",
-          }}/> */}
+
         <Text>{route.params.details.overview}</Text>
-        {/* <Text>"The near future, a time when both hope and hardships drive humanity to look to the stars and beyond. While a mysterious phenomenon menaces to destroy life on planet Earth, astronaut Roy McBride undertakes a mission across the immensity of space and its many perils to uncover the truth about a lost expedition that decades before boldly faced emptiness and silence in search of the unknown."</Text> */}
 
         <Text>{route.params.details.popularity}</Text>
-        {/* <Text>466.365</Text> */}
+
 
         <View style={styles.buttonView}>
           {!isFavorite  ?
