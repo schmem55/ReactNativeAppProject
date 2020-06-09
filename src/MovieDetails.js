@@ -7,14 +7,20 @@ export default function MovieDetailsScreen(props) {
   const [isFavorite,setFavorite]=useState(false)
   const route = useRoute();
 
+  useEffect(()=>{
+    setFavorite(props.favouritesList.includes(route.params.details.title))
+  },[])
+  
+
   const addToFavourites=(title)=>()=>{
     props.setFavouritesList([...props.favouritesList,title])
     setFavorite(prevState=>true)
   }
 
   const deleteFromFavourites=(title)=>()=>{
-    props.setFavouritesList([...props.favouritesList,title])
-    setFavorite(prevState=>true)
+    let favouritesList = props.favouritesList;
+    props.setFavouritesList(favouritesList.filter(movieTitle=>movieTitle!==title))
+    setFavorite(prevState=>!prevState)
   }
 
   return (
@@ -39,11 +45,11 @@ export default function MovieDetailsScreen(props) {
         {/* <Text>466.365</Text> */}
 
         <View style={styles.buttonView}>
-          {!isFavorite ?
+          {!isFavorite  ?
             <TouchableOpacity onPress={addToFavourites(route.params.details.title)} style={styles.button}>
               <Text style={{color:"white"}}>Add to Favorites</Text>
             </TouchableOpacity> :
-            <TouchableOpacity onPress={deleteFromFavourites(route.params.details.title)} style={styles.button}>
+            <TouchableOpacity onPress={deleteFromFavourites(route.params.details.title)} style={[styles.button,{backgroundColor:'red'}]}>
               <Text style={{color:"white"}}> Delete from Favorites</Text>
             </TouchableOpacity>
           }
