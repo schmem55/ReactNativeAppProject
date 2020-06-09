@@ -38,13 +38,20 @@ export default function WelcomeScreen({navigation}) {
         if (error) {
           console.log('login info has error: ' + error);
         } else {
-          console.log('result:', result);
-          var userData ={
-            "givenName":result.name,
-            "photo":result.picture.data.url
-          }
+
+          // setUserInfo((prevState)=>({
+          //   ...prevState,            
+          //   "givenName":result.name,
+          // }))
+
+          // setUserInfo((prevState)=>({
+          //   ...prevState,            
+          //   "photo":result.picture.data.url
+          // }))
+
+          console.log(userInfo)
           navigation.navigate('Profile',{
-            userInfo:userData
+            userInfo:userInfo
           })
         }
       },
@@ -64,9 +71,9 @@ export default function WelcomeScreen({navigation}) {
       userData.givenName=info.user.givenName
       userData.photo=info.user.photo
 
-     setUserInfo(userInfo=>({...userInfo,
-      userData
-    }))
+    //  setUserInfo(userInfo=>({...userInfo,
+    //   userData
+    // }))
 
       navigation.navigate('Profile',{
         userInfo:userData
