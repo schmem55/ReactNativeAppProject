@@ -13,7 +13,7 @@ export default function ProfileScreen({navigation}) {
     const apiKey="8b6a5997689890ea67ffcfbd4aac28f9";
 
     try{
-      let response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`, {
+      let response = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=1`, {
         method: 'GET',
         headers: {      
           'Accept': 'application/json',
@@ -21,6 +21,7 @@ export default function ProfileScreen({navigation}) {
         }
      })
       let responseJson = await response.json();
+      console.log(responseJson.results)
       responseJson.results.map(async (k,i)=>{
         setMovies(movies=>[...movies,{
           "title":k.title,
@@ -45,7 +46,9 @@ export default function ProfileScreen({navigation}) {
   return (
     <View style={styles.container}>
       <View style={{justifyContent:'center',alignItems:'center'}}>
-        <Text>Welcome {route.params.userInfo.givenName}</Text>
+        {/* <Text>Welcome {route.params.userInfo.givenName}</Text> */}
+        <Text>Welcome john</Text>
+
         <Image
         style={styles.image}  
         source={{
@@ -53,7 +56,7 @@ export default function ProfileScreen({navigation}) {
           }}/>
      
         <TouchableOpacity 
-        onPress={()=>getMoviesList()}
+        onPress={()=>this.getMoviesList()}
         style={styles.button}>
           <Text style={{color:"white"}}>Movies List </Text>
         </TouchableOpacity>
