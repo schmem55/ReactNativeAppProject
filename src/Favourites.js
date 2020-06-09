@@ -11,7 +11,7 @@ export default function FavouritesScreen(props) {
           return(<Text key={i}>{title}</Text>)
         })
        :
-        <Text key={i}>No favourites in your list, please go to the detail movie you would like to add , and click ! </Text>
+        <Text >No favourites in your list, please go to the detail movie you would like to add , and click ! </Text>
        }
        
     </View>
