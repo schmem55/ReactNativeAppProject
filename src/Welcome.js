@@ -13,13 +13,7 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 export default function WelcomeScreen({navigation}) {
-  const [userInfo,setUserInfo]=useState({
-    "email":"",
-    "familyName":"",
-    "givenName":"",
-    "id":"",
-    "photo":""
-  });
+  const [userInfo,setUserInfo]=useState({});
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -28,21 +22,32 @@ export default function WelcomeScreen({navigation}) {
       forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
       accountName: '', // [Android] specifies an account name on the device that should be used
          });
-  }, [userInfo])
+  }, [])
 
   signIn = async () => {
+    var userData =      {
+      "email":"",
+      "familyName":"",
+      "givenName":"",
+      "id":"",
+      "photo":""
+    }
     try {
       await GoogleSignin.hasPlayServices();
       const info = await GoogleSignin.signIn();
-      console.log(info.user)
-      setUserInfo(userInfo=>({...userInfo,
-        "email":info.user.email,
-        "familyName":info.user.familyName,
-        "givenName":info.user.givenName,
-        "id":info.user.id,
-        "photo":info.user.photo
-      }))
 
+      userData.email=info.user.email
+      userData.familyName=info.user.familyName
+      userData.givenName=info.user.givenName
+      userData.id=info.user.id
+      userData.photo=info.user.photo
+
+     
+     setUserInfo(userInfo=>({...userInfo,
+      "userData":userData
+    }))
+
+     console.log(userInfo)
       navigation.navigate('Profile',{
         userInfo:userInfo
       })

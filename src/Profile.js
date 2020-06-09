@@ -21,20 +21,14 @@ export default function ProfileScreen({navigation}) {
         }
      })
       let responseJson = await response.json();
-      console.log(responseJson.results)
       responseJson.results.map(async (k,i)=>{
-
         setMovies(movies=>[...movies,{
           "title":k.title,
           "poster":k.poster_path,
           "overview":k.overview ,
           "popularity":k.popularity
         }])
-
       })
-      if (movies){
-        console.log(movies)
-      }
      
      } catch (error){
        console.error(error);
@@ -42,7 +36,6 @@ export default function ProfileScreen({navigation}) {
   }
 
   openDetails=(details)=>{
-    console.log(details)
     navigation.navigate('MovieDetails',{
       itemId:1,
       details:details
