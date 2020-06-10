@@ -9,7 +9,7 @@
       Open an emulator with android studio and run inside IsracardProject:
           $ react-native run-android
 
-      # ATTENTION !!!
+        ATTENTION !!!
           If you're opening the project from a Mac you HAVE to add another file inside android folder:
               local.properties
               and then add this line : sdk.dir = /Users/USERNAME/Library/Android/sdk
