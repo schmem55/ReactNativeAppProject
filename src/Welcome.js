@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { View, Text,StyleSheet,Dimensions,TouchableOpacity} from 'react-native';
 import { LoginButton, AccessToken,  GraphRequest,GraphRequestManager} from 'react-native-fbsdk';
+import ProfileIcon from 'react-native-vector-icons/FontAwesome';
 
 import {
   GoogleSignin,
@@ -112,8 +113,9 @@ export default function WelcomeScreen({navigation}) {
     <View style={styles.container}>
         <View style={styles.body}>
             <Text style={styles.text}>Welcome Stranger!</Text>
-            <Text>Logo</Text>
+            <ProfileIcon name="user-circle" color="#d9dbdb" size={150}/>
             <Text style={styles.text}>Please log in to continue to the awesomness</Text>
+       
         </View>
         <View style={styles.buttonsView}>
           <LoginButton
@@ -150,11 +152,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around' 
     },
     body:{
-        justifyContent:'center',
-        alignItems:'center'
+        justifyContent:'space-between',
+        alignItems:'center',
+        height:height*0.4,        
     },
     text:{
-        fontSize:16
+        fontSize:20,
+        fontWeight:"bold",
+        textAlign:'center'
     },
     buttonsView:{
         flexDirection:'row'

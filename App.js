@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text,TouchableOpacity } from 'react-native';
+import { View, Text,TouchableOpacity,StyleSheet } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import WelcomeScreen from './src/Welcome';
@@ -7,7 +7,7 @@ import ProfileScreen from './src/Profile';
 import MovieListScreen from './src/MovieList';
 import MovieDetailsScreen from './src/MovieDetails';
 import FavouritesScreen from './src/Favourites';
-
+import StarIcon from 'react-native-vector-icons/Feather'
 
 const Stack = createStackNavigator();
 
@@ -24,9 +24,12 @@ function App() {
           component={WelcomeScreen} />
 
         <Stack.Screen name="MovieDetails"   options={({navigation})=>({headerRight:()=>(
-          <TouchableOpacity onPress={()=>{navigation.navigate('Favourites')}}>
-            <Text>Star</Text>
-          </TouchableOpacity>
+          <View>
+            <Text style={styles.bullet}>{favouritesList.length}</Text>
+            <TouchableOpacity style={{marginRight:10}} onPress={()=>{navigation.navigate('Favourites')}}>
+              <StarIcon name="star" size={40} color="black"/>
+            </TouchableOpacity>
+          </View>
            )})} >
           {props => <MovieDetailsScreen {...props} setFavouritesList={setFavouritesList} favouritesList={favouritesList}  />}
 
@@ -48,5 +51,18 @@ function App() {
     </NavigationContainer>
   );
 }
+const styles = StyleSheet.create({
+  bullet:{
+    borderRadius:9,
+    width:18,
+    height:18,
+    fontSize:12,
+    textAlign:'center',
+    backgroundColor:'orange',
+    color:"white",
+    position:"absolute",
+    zIndex:1
 
+  }
+})
 export default App;
