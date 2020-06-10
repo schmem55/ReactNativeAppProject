@@ -23,12 +23,12 @@ function App() {
           component={WelcomeScreen} />
 
         <Stack.Screen name="MovieDetails"   options={({navigation})=>({headerRight:()=>(
-          <View>
-            <Text style={styles.bullet}>{favouritesList.length}</Text>
-            <TouchableOpacity style={{marginRight:10}} onPress={()=>{navigation.navigate('Favourites')}}>
-              <StarIcon name="star" size={40} color="black"/>
-            </TouchableOpacity>
-          </View>
+            <View>
+              <Text style={styles.bullet}>{favouritesList.length}</Text>
+              <TouchableOpacity style={{marginRight:10}} onPress={()=>{navigation.navigate('Favourites')}}>
+                <StarIcon name="star" size={40} color="black"/>
+              </TouchableOpacity>
+            </View>
            )})} >
           {props => <MovieDetailsScreen {...props} setFavouritesList={setFavouritesList} favouritesList={favouritesList}  />}
 
