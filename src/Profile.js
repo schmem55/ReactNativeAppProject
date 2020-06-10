@@ -46,13 +46,13 @@ export default function ProfileScreen({navigation}) {
   return (
     <View style={styles.container}>
       <View style={{justifyContent:'center',alignItems:'center'}}>
-        <Text>Welcome {route.params.userInfo.userData.givenName}</Text>
+        <Text>Welcome {route.params.userInfo.givenName}</Text>
       
 
         <Image
         style={styles.image}  
         source={{
-            uri: route.params.userInfo.userData.photo,
+            uri: route.params.userInfo.photo,
           }}/>
      
         <TouchableOpacity 

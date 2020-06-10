@@ -3,7 +3,8 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+@import Firebase;
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -43,9 +44,23 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
+  [FIRApp configure];
   return YES;
 }
-
+- (BOOL)application:(UIApplication *)application
+  openURL:(nonnull NSURL *)url
+           options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options{
+  BOOL handled =  [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                            openURL:url
+                  
+                                                            sourceApplication:options
+                                                          [UIApplicationOpenURLOptionsSourceApplicationKey]
+                                                           annotation:options
+                                                           [UIApplicationOpenURLOptionsAnnotationKey]
+                   ];
+                  return handled;
+}
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
 #if DEBUG

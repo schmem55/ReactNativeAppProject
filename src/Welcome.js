@@ -13,7 +13,8 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 export default function WelcomeScreen({navigation}) {
-  const [userInfo,setUserInfo]=useState({});
+  const [userInfo,setUserInfo] = useState({});
+  const [isSigninInProgress,setInProgress] = useState(false)
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -38,7 +39,12 @@ export default function WelcomeScreen({navigation}) {
         if (error) {
           console.log('login info has error: ' + error);
         } else {
-
+          var userData ={
+            "givenName":"",
+            "photo":""
+          }
+          userData.givenName=result.name
+          userData.photo=result.picture.data.url
           // setUserInfo((prevState)=>({
           //   ...prevState,            
           //   "givenName":result.name,
@@ -51,7 +57,7 @@ export default function WelcomeScreen({navigation}) {
 
           console.log(userInfo)
           navigation.navigate('Profile',{
-            userInfo:userInfo
+            userInfo:userData
           })
         }
       },
@@ -59,7 +65,7 @@ export default function WelcomeScreen({navigation}) {
     new GraphRequestManager().addRequest(profileRequest).start();
   };
 
-  signIn = async () => {
+  _signIn = async () => {
     var userData =      {
       "givenName":"",
       "photo":""
@@ -110,25 +116,28 @@ export default function WelcomeScreen({navigation}) {
             <Text style={styles.text}>Please log in to continue to the awesomness</Text>
         </View>
         <View style={styles.buttonsView}>
-        <LoginButton
-          onLoginFinished={(error, result) => {
-            if (error) {
-              console.log('login has error: ' + result);
-            } else if (result.isCancelled) {
-              console.log('login is cancelled.');
-            } else {
-              AccessToken.getCurrentAccessToken().then(data => {
-                const accessToken = data.accessToken.toString();
-                getInfoFromToken(accessToken);
-              })
-            }
-          }}
-          onLogoutFinished={() => setUserInfo(null)}
-        />
-            <TouchableOpacity onPress={()=>signIn()} style={[styles.button,{backgroundColor:'red'}]}>
-                <Text>Logo</Text>
-                <Text style={styles.text}>Log in with Google</Text>
-            </TouchableOpacity>
+          <LoginButton
+            onLoginFinished={(error, result) => {
+              if (error) {
+                console.log('login has error: ' + result);
+              } else if (result.isCancelled) {
+                console.log('login is cancelled.');
+              } else {
+                AccessToken.getCurrentAccessToken().then(data => {
+                  const accessToken = data.accessToken.toString();
+                  getInfoFromToken(accessToken);
+                })
+              }
+            }}
+            onLogoutFinished={() => setUserInfo(null)}
+          />
+
+        <GoogleSigninButton
+          style={{ width: 192, height: 48 }}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={this._signIn}
+          disabled={isSigninInProgress} />
         </View>
     </View>
   );
