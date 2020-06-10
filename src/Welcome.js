@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 import { View, Text,StyleSheet,Dimensions,TouchableOpacity} from 'react-native';
-import { LoginButton, AccessToken,  GraphRequest,GraphRequestManager,} from 'react-native-fbsdk';
+import { AccessToken,  GraphRequest,GraphRequestManager, LoginManager} from 'react-native-fbsdk';
+import ProfileIcon from 'react-native-vector-icons/FontAwesome';
+import FacebookIcon from 'react-native-vector-icons/EvilIcons'
+import GoogleIcon from 'react-native-vector-icons/AntDesign'
 
 import {
   GoogleSignin,
-  GoogleSigninButton,
   statusCodes,
 } from '@react-native-community/google-signin';
 
@@ -13,8 +15,8 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 export default function WelcomeScreen({navigation}) {
-  const [userInfo,setUserInfo] = useState({});
-  const [isSigninInProgress,setInProgress] = useState(false)
+  const [isFbLoggedIn,setIsFbLoggedin] = useState(false)
+  const [isGoogleLoggedIn,setIsGoogleLoggedIn] = useState(false)
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -24,6 +26,24 @@ export default function WelcomeScreen({navigation}) {
       accountName: '', // [Android] specifies an account name on the device that should be used
          });
   }, [])
+
+const loginWithFacebook=()=>{
+
+  LoginManager.logInWithPermissions(["public_profile", "email"]).then(
+    (result) => {
+       if (result.isCancelled) {
+        console.log('login is cancelled.');
+      } else {
+        AccessToken.getCurrentAccessToken().then(data => {
+          console.log(data)
+          const accessToken = data.accessToken.toString();
+          getInfoFromToken(accessToken);
+        })
+      }
+    }
+  )
+}
+  
 
   const getInfoFromToken = token => {
     const PROFILE_REQUEST_PARAMS = {
@@ -39,33 +59,30 @@ export default function WelcomeScreen({navigation}) {
         if (error) {
           console.log('login info has error: ' + error);
         } else {
+
           var userData ={
             "givenName":"",
             "photo":""
           }
           userData.givenName=result.name
           userData.photo=result.picture.data.url
-          // setUserInfo((prevState)=>({
-          //   ...prevState,            
-          //   "givenName":result.name,
-          // }))
-
-          // setUserInfo((prevState)=>({
-          //   ...prevState,            
-          //   "photo":result.picture.data.url
-          // }))
-
-          console.log(userInfo)
+         
           navigation.navigate('Profile',{
             userInfo:userData
           })
+          setIsFbLoggedin(true)
+
         }
       },
     );
     new GraphRequestManager().addRequest(profileRequest).start();
   };
 
-  _signIn = async () => {
+  const _logOutWithFacebook=()=>{
+    LoginManager.logOut()
+    setIsFbLoggedin(false)
+  }
+  const _signInWithGoogle = async () => {
     var userData =      {
       "givenName":"",
       "photo":""
@@ -76,14 +93,12 @@ export default function WelcomeScreen({navigation}) {
 
       userData.givenName=info.user.givenName
       userData.photo=info.user.photo
-
-    //  setUserInfo(userInfo=>({...userInfo,
-    //   userData
-    // }))
-
+      
       navigation.navigate('Profile',{
         userInfo:userData
       })
+      setIsGoogleLoggedIn(true)
+
 
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -98,11 +113,11 @@ export default function WelcomeScreen({navigation}) {
     }
   };
 
-  signOut = async () => {
+  const _signOutWithGoogle = async () => {
     try {
       await GoogleSignin.revokeAccess();
       await GoogleSignin.signOut();
-      //setUserInfo(null); // Remember to remove the user from your app's state as well
+      setIsGoogleLoggedIn(false)
     } catch (error) {
       console.error(error);
     }
@@ -112,32 +127,32 @@ export default function WelcomeScreen({navigation}) {
     <View style={styles.container}>
         <View style={styles.body}>
             <Text style={styles.text}>Welcome Stranger!</Text>
-            <Text>Logo</Text>
+            <ProfileIcon name="user-circle" color="#d9dbdb" size={150}/>
             <Text style={styles.text}>Please log in to continue to the awesomness</Text>
+       
         </View>
         <View style={styles.buttonsView}>
-          <LoginButton
-            onLoginFinished={(error, result) => {
-              if (error) {
-                console.log('login has error: ' + result);
-              } else if (result.isCancelled) {
-                console.log('login is cancelled.');
-              } else {
-                AccessToken.getCurrentAccessToken().then(data => {
-                  const accessToken = data.accessToken.toString();
-                  getInfoFromToken(accessToken);
-                })
-              }
-            }}
-            onLogoutFinished={() => setUserInfo(null)}
-          />
-
-        <GoogleSigninButton
-          style={{ width: 192, height: 48 }}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={this._signIn}
-          disabled={isSigninInProgress} />
+          {!isFbLoggedIn?
+           <TouchableOpacity style={styles.button} onPress={() => loginWithFacebook()}>
+              <FacebookIcon color="white"  name ="sc-facebook" size={26}/>
+              <Text style={{color:"white",fontSize:14}}> Login With Facebook </Text>          
+            </TouchableOpacity>:
+            <TouchableOpacity style={styles.button}  onPress={() => _logOutWithFacebook()}>
+              <FacebookIcon color="white"  name ="sc-facebook" size={26}/>
+              <Text style={{color:"white",fontSize:14}}> Log Out </Text>          
+            </TouchableOpacity>
+        }
+         
+         {!isGoogleLoggedIn?
+           <TouchableOpacity style={[styles.button,{backgroundColor:"#de5246"}]} onPress={() => _signInWithGoogle()}>
+              <GoogleIcon color="white"  name ="google" size={20}/>
+              <Text style={{color:"white",fontSize:14}}> Or With Google </Text>          
+            </TouchableOpacity>:
+            <TouchableOpacity style={[styles.button,{backgroundColor:"#de5246"}]}  onPress={() => _signOutWithGoogle()}>
+              <GoogleIcon color="white"  name ="google" size={20}/>
+              <Text style={{color:"white",fontSize:14}}> Log Out </Text>          
+            </TouchableOpacity>
+        }
         </View>
     </View>
   );
@@ -150,18 +165,29 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around' 
     },
     body:{
-        justifyContent:'center',
-        alignItems:'center'
+        justifyContent:'space-between',
+        alignItems:'center',
+        height:height*0.4,        
     },
     text:{
-        fontSize:16
+        fontSize:20,
+        fontWeight:"bold",
+        textAlign:'center'
     },
     buttonsView:{
-        flexDirection:'row'
+        flexDirection:'row',
+        alignItems:'center'
     },
     button:{
         flexDirection:'row',
-        
+        backgroundColor:'#4267B2',
+        height:40,
+        margin:8,
+        borderRadius:10,
+        justifyContent:'space-around',
+        alignItems:"center",
+        padding:10
+
     }
 })
 
