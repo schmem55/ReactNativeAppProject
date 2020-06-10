@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 import { View, Text,StyleSheet,Dimensions,TouchableOpacity} from 'react-native';
-import { LoginButton, AccessToken,  GraphRequest,GraphRequestManager, LoginManager} from 'react-native-fbsdk';
+import { AccessToken,  GraphRequest,GraphRequestManager, LoginManager} from 'react-native-fbsdk';
 import ProfileIcon from 'react-native-vector-icons/FontAwesome';
 import FacebookIcon from 'react-native-vector-icons/EvilIcons'
+import GoogleIcon from 'react-native-vector-icons/AntDesign'
+
 import {
   GoogleSignin,
-  GoogleSigninButton,
   statusCodes,
 } from '@react-native-community/google-signin';
 
@@ -15,8 +16,8 @@ const height = Dimensions.get('window').height;
 
 export default function WelcomeScreen({navigation}) {
   const [userInfo,setUserInfo] = useState({});
-  const [isSigninInProgress,setInProgress] = useState(false)
   const [isFbLoggedIn,setIsFbLoggedin] = useState(false)
+  const [isGoogleLoggedIn,setIsGoogleLoggedIn] = useState(false)
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -141,19 +142,24 @@ const loginWithFacebook=()=>{
           {!isFbLoggedIn?
            <TouchableOpacity style={styles.button} onPress={() => loginWithFacebook()}>
               <FacebookIcon color="white"  name ="sc-facebook" size={26}/>
-              <Text style={{color:"white"}}> Login With Facebook </Text>          
+              <Text style={{color:"white",fontSize:14}}> Login With Facebook </Text>          
             </TouchableOpacity>:
             <TouchableOpacity style={styles.button}  onPress={() => setIsFbLoggedin(false)}>
               <FacebookIcon color="white"  name ="sc-facebook" size={26}/>
-              <Text style={{color:"white"}}> Log Out </Text>          
+              <Text style={{color:"white",fontSize:14}}> Log Out </Text>          
             </TouchableOpacity>
         }
          
-        <GoogleSigninButton
-          style={{ flex:2,height:36}}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={_signIn}
-          disabled={isSigninInProgress} />
+         {!isGoogleLoggedIn?
+           <TouchableOpacity style={[styles.button,{backgroundColor:"#de5246"}]} onPress={() => loginWithFacebook()}>
+              <GoogleIcon color="white"  name ="google" size={20}/>
+              <Text style={{color:"white",fontSize:14}}> Or With Google </Text>          
+            </TouchableOpacity>:
+            <TouchableOpacity style={[styles.button,{backgroundColor:"#de5246"}]}  onPress={() => setIsFbLoggedin(false)}>
+              <GoogleIcon color="white"  name ="google" size={20}/>
+              <Text style={{color:"white",fontSize:14}}> Log Out </Text>          
+            </TouchableOpacity>
+        }
         </View>
     </View>
   );
@@ -183,11 +189,11 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         backgroundColor:'#4267B2',
         height:40,
-        flex:2,
-        margin:10,
+        margin:8,
         borderRadius:10,
-        justifyContent:'center',
-        alignItems:"center"
+        justifyContent:'space-around',
+        alignItems:"center",
+        padding:10
 
     }
 })
