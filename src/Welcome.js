@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import { View, Text,StyleSheet,Dimensions,TouchableOpacity} from 'react-native';
-import { LoginButton, AccessToken,  GraphRequest,GraphRequestManager} from 'react-native-fbsdk';
+import { LoginButton, AccessToken,  GraphRequest,GraphRequestManager, LoginManager} from 'react-native-fbsdk';
 import ProfileIcon from 'react-native-vector-icons/FontAwesome';
-
+import FacebookIcon from 'react-native-vector-icons/EvilIcons'
 import {
   GoogleSignin,
   GoogleSigninButton,
@@ -16,6 +16,7 @@ const height = Dimensions.get('window').height;
 export default function WelcomeScreen({navigation}) {
   const [userInfo,setUserInfo] = useState({});
   const [isSigninInProgress,setInProgress] = useState(false)
+  const [isFbLoggedIn,setIsFbLoggedin] = useState(false)
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -25,6 +26,25 @@ export default function WelcomeScreen({navigation}) {
       accountName: '', // [Android] specifies an account name on the device that should be used
          });
   }, [])
+const loginWithFacebook=()=>{
+
+  LoginManager.logInWithPermissions(["public_profile", "email"]).then(
+    (result) => {
+       if (result.isCancelled) {
+        console.log('login is cancelled.');
+      } else {
+        AccessToken.getCurrentAccessToken().then(data => {
+          console.log(data)
+          const accessToken = data.accessToken.toString();
+          getInfoFromToken(accessToken);
+          setIsFbLoggedin(true)
+        })
+      }
+    }
+  )
+
+}
+  
 
   const getInfoFromToken = token => {
     const PROFILE_REQUEST_PARAMS = {
@@ -118,23 +138,17 @@ export default function WelcomeScreen({navigation}) {
        
         </View>
         <View style={styles.buttonsView}>
-          <LoginButton
-          
-            onLoginFinished={(error, result) => {
-              if (error) {
-                console.log('login has error: ' + result);
-              } else if (result.isCancelled) {
-                console.log('login is cancelled.');
-              } else {
-                AccessToken.getCurrentAccessToken().then(data => {
-                  const accessToken = data.accessToken.toString();
-                  getInfoFromToken(accessToken);
-                })
-              }
-            }}
-            onLogoutFinished={() => setUserInfo(null)}
-          />
-
+          {!isFbLoggedIn?
+           <TouchableOpacity style={styles.button} onPress={() => loginWithFacebook()}>
+              <FacebookIcon color="white"  name ="sc-facebook" size={26}/>
+              <Text style={{color:"white"}}> Login With Facebook </Text>          
+            </TouchableOpacity>:
+            <TouchableOpacity style={styles.button}  onPress={() => setIsFbLoggedin(false)}>
+              <FacebookIcon color="white"  name ="sc-facebook" size={26}/>
+              <Text style={{color:"white"}}> Log Out </Text>          
+            </TouchableOpacity>
+        }
+         
         <GoogleSigninButton
           style={{ flex:2,height:36}}
           color={GoogleSigninButton.Color.Dark}
@@ -162,10 +176,19 @@ const styles = StyleSheet.create({
         textAlign:'center'
     },
     buttonsView:{
-        flexDirection:'row'
+        flexDirection:'row',
+        alignItems:'center'
     },
     button:{
         flexDirection:'row',
+        backgroundColor:'#4267B2',
+        height:40,
+        flex:2,
+        margin:10,
+        borderRadius:10,
+        justifyContent:'center',
+        alignItems:"center"
+
     }
 })
 
