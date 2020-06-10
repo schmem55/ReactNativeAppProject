@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
-import { View, Text,TouchableOpacity,StyleSheet,Image, Button,ScrollView,Dimensions } from 'react-native';
+import { View, Text,StyleSheet,ScrollView,Dimensions } from 'react-native';
 import StarIcon from 'react-native-vector-icons/FontAwesome'
 
 

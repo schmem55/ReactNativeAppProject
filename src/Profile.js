@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text,StyleSheet,Image ,TouchableOpacity,Dimensions,ScrollView, ViewBase} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 

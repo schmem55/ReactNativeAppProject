@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text,TouchableOpacity,StyleSheet } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import WelcomeScreen from './src/Welcome';
 import ProfileScreen from './src/Profile';
@@ -13,7 +13,7 @@ const Stack = createStackNavigator();
 
 function App() {
   const [favouritesList,setFavouritesList] = useState([])
-
+  
   return (
     <NavigationContainer >
       <Stack.Navigator initialRouteName="Welcome">
