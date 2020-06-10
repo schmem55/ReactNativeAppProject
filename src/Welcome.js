@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { View, Text,StyleSheet,Dimensions,TouchableOpacity} from 'react-native';
-import { LoginButton, AccessToken,  GraphRequest,GraphRequestManager,} from 'react-native-fbsdk';
+import { LoginButton, AccessToken,  GraphRequest,GraphRequestManager} from 'react-native-fbsdk';
 
 import {
   GoogleSignin,
@@ -65,7 +65,7 @@ export default function WelcomeScreen({navigation}) {
     new GraphRequestManager().addRequest(profileRequest).start();
   };
 
-  _signIn = async () => {
+  const _signIn = async () => {
     var userData =      {
       "givenName":"",
       "photo":""
@@ -117,6 +117,7 @@ export default function WelcomeScreen({navigation}) {
         </View>
         <View style={styles.buttonsView}>
           <LoginButton
+          
             onLoginFinished={(error, result) => {
               if (error) {
                 console.log('login has error: ' + result);
@@ -133,10 +134,9 @@ export default function WelcomeScreen({navigation}) {
           />
 
         <GoogleSigninButton
-          style={{ width: 192, height: 48 }}
-          size={GoogleSigninButton.Size.Wide}
+          style={{ flex:2,height:36}}
           color={GoogleSigninButton.Color.Dark}
-          onPress={this._signIn}
+          onPress={_signIn}
           disabled={isSigninInProgress} />
         </View>
     </View>
@@ -161,7 +161,6 @@ const styles = StyleSheet.create({
     },
     button:{
         flexDirection:'row',
-        
     }
 })
 
