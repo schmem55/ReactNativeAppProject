@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { View, Text,TouchableOpacity,StyleSheet,Image,Dimensions } from 'react-native';
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 

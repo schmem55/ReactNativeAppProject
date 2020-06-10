@@ -7,6 +7,7 @@ const height = Dimensions.get('window').height;
 
 export default function ProfileScreen({navigation}) {
   const [movies,setMovies]=useState([]);
+  const [isClicked,setIsClicked]=useState(false)
   const route = useRoute();
 
  const getMoviesList=async()=>{
@@ -21,22 +22,27 @@ export default function ProfileScreen({navigation}) {
         }
      })
       let responseJson = await response.json();
-      console.log(responseJson.results)
-      responseJson.results.map(async (k,i)=>{
-        setMovies(movies=>[...movies,{
-          "title":k.title,
-          "poster":k.poster_path,
-          "overview":k.overview ,
-          "popularity":k.popularity
-        }])
-      })
+      if (responseJson){
+        setIsClicked(true)
+        responseJson.results.map(async (k,i)=>{
+          setMovies(movies=>[...movies,{
+            "title":k.title,
+            "poster":k.poster_path,
+            "overview":k.overview ,
+            "popularity":k.popularity
+          }])
+        })
+      }else{
+        alert("Oups, an error was occured, try again")
+      }
+     
      
      } catch (error){
        console.error(error);
      }
   }
 
-  openDetails=(details)=>{
+  const openDetails=(details)=>{
     navigation.navigate('MovieDetails',{
       itemId:1,
       details:details
@@ -54,8 +60,9 @@ export default function ProfileScreen({navigation}) {
           }}/>
      
         <TouchableOpacity 
-        onPress={getMoviesList}
-        style={styles.button}>
+          disabled={isClicked}
+          onPress={getMoviesList}
+          style={[styles.button,isClicked?{backgroundColor:"gray"}:{backgroundColor:"#285e5e"}]}>
           <Text style={{color:"white",fontSize:22}}>Movies List </Text>
         </TouchableOpacity>
       </View>
@@ -66,15 +73,10 @@ export default function ProfileScreen({navigation}) {
         <ScrollView persistentScrollbar={true} showsVerticalScrollIndicator={true} contentContainerStyle={styles.moviesView}>
           {movies.map((k,i)=>{
             return (
-            <TouchableOpacity
-            onPress={
-              ()=>openDetails(k)
-            }
-             key={i}>
-               <View style={styles.movie}>
+            <TouchableOpacity onPress={()=>openDetails(k)} key={i}>
+              <View style={styles.movie}>
                 <Text style={{fontSize:16,fontWeight:'bold',color:"white",}}>{k.title}</Text>
-               </View>
-             
+              </View> 
             </TouchableOpacity>
             )
           })}   
@@ -117,7 +119,6 @@ const styles = StyleSheet.create({
     width:150,
     height:70,
     borderRadius:12,
-    backgroundColor:"#285e5e"
   },
   movie:{
     borderRadius:12,
