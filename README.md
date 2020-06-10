@@ -6,7 +6,7 @@
     $ npm install
 
   # FOR ANDROID:
-      # Open an emulator with android studio and run inside IsracardProject:
+      Open an emulator with android studio and run inside IsracardProject:
           $ react-native run-android
 
       # ATTENTION !!!
@@ -15,7 +15,7 @@
               and then add this line : sdk.dir = /Users/USERNAME/Library/Android/sdk
 
   # FOR IOS:
-      # In terminal from IsracardProject:
+      In terminal from IsracardProject:
           $ cd ios/
           $ pod install
           $ react-native run-ios
