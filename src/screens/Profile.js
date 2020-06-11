@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text,StyleSheet,Image ,TouchableOpacity,Dimensions,ScrollView, ActivityIndicator} from 'react-native';
+import { View, Text,StyleSheet,Image ,TouchableOpacity,Dimensions,ScrollView, ActivityIndicator,Platform} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
 const width = Dimensions.get('window').width;
@@ -67,7 +67,7 @@ export default function ProfileScreen({navigation}) {
           onPress={getMoviesList}
           style={[styles.button,isClicked?{backgroundColor:"gray"}:{backgroundColor:"#285e5e"}]}>
           {isLoading?
-          <ActivityIndicator size={50}/>
+          <ActivityIndicator size={Platform.OS == "android"?50:"large"}/>
           :
           <Text style={{color:"white",fontSize:22}}>Movies List </Text>}
           

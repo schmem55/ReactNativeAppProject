@@ -29,7 +29,7 @@ export default function WelcomeScreen({navigation}) {
 
 const loginWithFacebook=()=>{
 
-  LoginManager.logInWithPermissions(["public_profile", "email"]).then(
+  LoginManager.logInWithPermissions(["public_profile"]).then(
     (result) => {
        if (result.isCancelled) {
         console.log('login is cancelled.');
