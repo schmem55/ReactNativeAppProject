@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text,StyleSheet,Image ,TouchableOpacity,Dimensions,ScrollView, ViewBase} from 'react-native';
+import { View, Text,StyleSheet,Image ,TouchableOpacity,Dimensions,ScrollView, ActivityIndicator} from 'react-native';
 import { useRoute } from '@react-navigation/native';
 
 const width = Dimensions.get('window').width;
@@ -8,9 +8,11 @@ const height = Dimensions.get('window').height;
 export default function ProfileScreen({navigation}) {
   const [movies,setMovies]=useState([]);
   const [isClicked,setIsClicked]=useState(false)
+  const [isLoading,setIsLoading] = useState(false)
   const route = useRoute();
 
  const getMoviesList=async()=>{
+   setIsLoading(true)
     const apiKey="8b6a5997689890ea67ffcfbd4aac28f9";
 
     try{
@@ -24,6 +26,7 @@ export default function ProfileScreen({navigation}) {
       let responseJson = await response.json();
       if (responseJson){
         setIsClicked(true)
+        setIsLoading(false)
         responseJson.results.map(async (k,i)=>{
           setMovies(movies=>[...movies,{
             "title":k.title,
@@ -63,7 +66,11 @@ export default function ProfileScreen({navigation}) {
           disabled={isClicked}
           onPress={getMoviesList}
           style={[styles.button,isClicked?{backgroundColor:"gray"}:{backgroundColor:"#285e5e"}]}>
-          <Text style={{color:"white",fontSize:22}}>Movies List </Text>
+          {isLoading?
+          <ActivityIndicator size={50}/>
+          :
+          <Text style={{color:"white",fontSize:22}}>Movies List </Text>}
+          
         </TouchableOpacity>
       </View>
       

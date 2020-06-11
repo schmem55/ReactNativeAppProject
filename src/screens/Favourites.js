@@ -1,3 +1,4 @@
+import React from 'react';
 import { View, Text,StyleSheet,ScrollView,Dimensions } from 'react-native';
 import StarIcon from 'react-native-vector-icons/FontAwesome'
 

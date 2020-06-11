@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { View, Text,TouchableOpacity,StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import WelcomeScreen from './src/Welcome';
-import ProfileScreen from './src/Profile';
-import MovieDetailsScreen from './src/MovieDetails';
-import FavouritesScreen from './src/Favourites';
+import WelcomeScreen from './src/screens/Welcome';
+import ProfileScreen from './src/screens/Profile';
+import MovieDetailsScreen from './src/components/MovieDetails';
+import FavouritesScreen from './src/screens/Favourites';
 import StarIcon from 'react-native-vector-icons/Feather'
 
 const Stack = createStackNavigator();
