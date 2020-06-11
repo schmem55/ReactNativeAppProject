@@ -1,7 +1,7 @@
 # IsracardProject
 
   # In terminal :
-    $ git clone 
+    $ git clone https://github.com/schmem55/IsracardProject
     $ cd Isracard Project
     $ npm install
 
